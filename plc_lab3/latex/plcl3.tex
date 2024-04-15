@@ -1,0 +1,71 @@
+\documentclass[a4paper, 16pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel} 
+\usepackage[left=20mm, top=20mm, right=20mm,
+ bottom=20mm, head=1mm, foot=1mm]{geometry}
+\usepackage{tikz} 
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{graphicx}
+\usepackage{fancybox, fancyhdr}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{xcolor}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Лабораторная работа №3}
+\fancyhead[R]{Программирование промышленных контроллеров}
+\fancyfoot[C]{\thepage}
+\graphicspath{{images/}}
+\usetikzlibrary{patterns}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={contents setup},
+    pdfpagemode=FullScreen,
+}
+\newcommand{\frc}[2]{\raisebox{2pt}{$#1$}\big/\raisebox{-3pt}{$#2$}}
+
+\begin{document}
+\begin{titlepage}
+
+    \begin{center}
+    \vfill
+    
+    Федеральное государственное автономное образовательное учреждение высшего образования\\
+    «Национальный Исследовательский Университет ИТМО»\ \\
+    
+    \vfill
+    {\large\bf ЛАБОРАТОРНАЯ РАБОТА №3\\
+        ПО ПРЕДМЕТУ «ПРОГРАММИРОВАНИЕ ПРОМЫШЛЕННЫХ КОНТРОЛЛЕРОВ»}
+    \vfill
+        
+    \begin{flushright}
+        \begin{minipage}{.45\textwidth}
+        {
+            \hbox{Преподаватель: Крылова А. А.}
+            \hbox{Выполнили:}
+            \hbox{Румянцев А. А.}
+            \hbox{Дьячихин Д. Н.}
+            \hbox{}
+            \hbox{Факультет: СУиР}
+            \hbox{Потоки: ПРОГ. ПРОМ.ЛК 2.2 / 2.1}
+        }
+        \end{minipage}
+    \end{flushright}
+    
+    \vfill
+            
+    Санкт-Петербург\\
+    2024
+    \end{center}
+    \end{titlepage}
+    \setlength{\parskip}{1.5mm}
+    
+    \tableofcontents
+
+    \newpage
+
+\end{document}
