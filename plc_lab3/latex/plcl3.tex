@@ -1,15 +1,18 @@
-\documentclass[a4paper, 16pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[english, russian]{babel} 
-\usepackage[left=20mm, top=20mm, right=20mm,
- bottom=20mm, head=1mm, foot=1mm]{geometry}
-\usepackage{tikz} 
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{cmap}
+\usepackage[english, russian]{babel}
+\usepackage{indentfirst}
+\usepackage[left=20mm, top=20mm, right=20mm, bottom=20mm]{geometry}
+\usepackage{tikz}
+\usepackage{float}
 \usepackage{amsmath, amsfonts, amssymb}
 \usepackage{graphicx}
 \usepackage{fancybox, fancyhdr}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{caption}
+\usepackage{subcaption}
 \usepackage{xcolor}
 \pagestyle{fancy}
 \fancyhf{}
@@ -18,54 +21,222 @@
 \fancyfoot[C]{\thepage}
 \graphicspath{{images/}}
 \usetikzlibrary{patterns}
+\definecolor{LightGray}{gray}{0.95}
+\lstdefinestyle{pycode}{
+    language=Python,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{LightGray},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=none,
+    rulecolor=\color{black},
+    linewidth=\linewidth,
+    keywordstyle=\color{red}\bfseries,
+    commentstyle=\color{green!40!black},
+    stringstyle=\color{blue},
+    escapeinside={\%*}{*)},
+    xleftmargin=0pt,
+    framexleftmargin=0pt,
+    framexrightmargin=0pt
+}
+\lstset{style=pycode}
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
-    filecolor=magenta,      
+    filecolor=magenta,
     urlcolor=cyan,
     pdftitle={contents setup},
     pdfpagemode=FullScreen,
 }
+\setlength{\parskip}{1.5mm}
+\setlength{\headheight}{15pt}
+\setlength{\footskip}{15pt}
+\allowdisplaybreaks
+\DeclareMathOperator{\sinc}{sinc}
 \newcommand{\frc}[2]{\raisebox{2pt}{$#1$}\big/\raisebox{-3pt}{$#2$}}
 
 \begin{document}
-\begin{titlepage}
+    \begin{titlepage}
 
-    \begin{center}
-    \vfill
-    
-    Федеральное государственное автономное образовательное учреждение высшего образования\\
-    «Национальный Исследовательский Университет ИТМО»\ \\
-    
-    \vfill
-    {\large\bf ЛАБОРАТОРНАЯ РАБОТА №3\\
-        ПО ПРЕДМЕТУ «ПРОГРАММИРОВАНИЕ ПРОМЫШЛЕННЫХ КОНТРОЛЛЕРОВ»}
-    \vfill
-        
-    \begin{flushright}
-        \begin{minipage}{.45\textwidth}
-        {
-            \hbox{Преподаватель: Крылова А. А.}
-            \hbox{Выполнили:}
-            \hbox{Румянцев А. А.}
-            \hbox{Дьячихин Д. Н.}
-            \hbox{}
-            \hbox{Факультет: СУиР}
-            \hbox{Потоки: ПРОГ. ПРОМ.ЛК 2.2 / 2.1}
-        }
-        \end{minipage}
-    \end{flushright}
-    
-    \vfill
-            
-    Санкт-Петербург\\
-    2024
-    \end{center}
+        \begin{center}
+        \includegraphics[width=0.3\textwidth]{itmo.png} % requires itmo.png in /images folder
+        \vfill
+
+        Федеральное государственное автономное образовательное учреждение высшего образования
+        «Национальный Исследовательский Университет ИТМО»\\
+
+        \vfill
+        {\large\bf ЛАБОРАТОРНАЯ РАБОТА №3}\\
+        {\large\bf ПРЕДМЕТ «ПРОГРАММИРОВАНИЕ ПРОМЫШЛЕННЫХ КОНТРОЛЛЕРОВ»}\\
+        {\large\bf ТЕМА «ПЕРЕДАЧА ДАННЫХ С ПЛК ПО ПРОТОКОЛУ MODBUS TCP И УПРАВЛЕНИЕ ЧАТОТНЫМ ПРЕОБРАЗОВАТЕЛЕМ>>}
+        \vfill
+
+        \begin{flushright}
+            \begin{minipage}{.45\textwidth}
+                {
+                    \hbox{Преподаватель:}
+                    \hbox{Крылова А. А.}
+                    \hbox{}
+                    \hbox{Выполнили:}
+                    \hbox{Румянцев А. А.}
+                    \hbox{Дьячихин Д. Н.}
+                    \hbox{Чебаненко Д. А.}
+                    \hbox{}
+                    \hbox{Факультет: СУиР}
+                    \hbox{Потоки ПРОГ. ПРОМ.ЛК:}
+                    \hbox{2.2, 2.1, 1.1}
+                }
+            \end{minipage}
+        \end{flushright}
+
+        \vfill
+
+        Санкт-Петербург\\
+        2024
+        \end{center}
     \end{titlepage}
-    \setlength{\parskip}{1.5mm}
     
     \tableofcontents
 
     \newpage
+    \section{Введение.}
+    \subsection{Цель работы.}
+    Разработать программу для ПЛК, которая передает в сеть
+    данные с датчиков температуры и влажности по протоколу TCP. Разработать программу для управления скоростью и
+    направлением вращения асинхронного двигателя с помощью частотного преобразователя.
 
+    
+    \subsection{Задания по работе.}
+    \begin{enumerate}
+        \item Изучить теоретическую часть работы.
+        \item Реализовать модуль передачи данных в сеть на языке ST.
+        \item Реализовать модуль получения, обработки и отображения данных на языке Python.
+        \item Изучить документацию на частотный преобразователь.
+        \item Реализовать модуль для управления частотным преобразователем по протоколу Modbus TCP.
+    \end{enumerate}
+    \section{Установка.}
+    В данной лабораторной работе мы работали со стендом на основе ПЛК Schneider Electric Modicon M251.
+    \subsection{Схема установки.}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{scheme3.png}
+        \captionsetup{skip=0pt}
+        \caption{Схема протоколов стенда.}
+        \label{fig:scheme}
+    \end{figure}
+    Так как в данной лабораторной работе мы работаем с тем же стендом, что и в предыдущей работе, то
+    общая схема остается неизменной. Связь ПК и ПЛК происходит через коммутатор и Wi-Fi роутер. Во время
+    выполнения работы ПК имел IP адрес 192.168.1.33 (было обнаружено с помощью команды ifconfig), а ПЛК --
+    192.168.1.150. 60200 и 60201 -- номера регистров датчика температуры и влажности соответственно, из которых можно прочитать
+    данные с датчиков (для начала нужно подключиться). 62200 -- аналогично для переменной \textit{foo} (позже
+    про нее будет написано подробнее), однако с той разницей, что это номер регистра для записи данных.
+
+
+    \section{Теоретическая часть.}
+    Modbus TCP -- открытый протокол, не зависящий от производителя используемого аппаратного обеспечения.
+    Предназначен для контроля и управления оборудованием в системах несложной промышленной автоматизации.
+    В частности, позволяет реализовать обмен сообщениями Modbus в локальных и глобальных вычислительных сетях
+    с использованием стека протоколов TCP/IP, который часто используется для подключения к общей промышленной
+    сети ПЛК, модулей ввода-вывода и <<шлюзов>>.
+
+
+    Частотный преобразователь – это электронное или
+    электромеханическое устройство, которое преобразует переменный ток
+    (AC) одной частоты в переменный ток другой частоты. Устройство
+    также может изменять напряжение, но это является второстепенным по
+    отношению к его основной цели, поскольку преобразование
+    напряжения переменного тока гораздо проще реализовать, нежели
+    преобразование частоты.
+
+
+    \section{Экспериментальная часть.}
+    За основу возьмем проект лабораторной работы №2.
+    
+    
+    \subsection{Передача данных с ПЛК по протоколу Modbus TCP.}
+    В дереве проекта на вкладке \textit{Device tree} в узле
+    \textit{Ethernet\_{1}} создадим объект \textit{ModbusTCP\_{SLAVE}\_{Device}}.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=1]{modbus_tree.png}
+        \captionsetup{skip=0pt}
+        \caption{Созданный объект ModbusTCP\_{SLAVE}\_{Device} в дереве проекта.}
+        \label{fig:mtree}
+    \end{figure}
+
+
+    Создадим новый список глобальных перменных в узле \textit{GVL} на
+    вкладке \textit{Application tree} и добавим туда переменную \textit{foo} целого типа (остальные перменные
+    будут рассмотрены позже).
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=1.375]{global.png}
+        \captionsetup{skip=0pt}
+        \caption{Список глобальных переменных.}
+        \label{fig:gvl}
+    \end{figure}
+
+    На вкладке \textit{Tools Tree} создадим объект \textit{Relocation Table}. В таблице \textit{Read} создадим две
+    новые пустые перменные \textit{Modbus}. Нажмем на ячейку \textit{Variable} и в открывшемся диалоге найдем переменные для
+    температуры и влажности из предыдущей работы. Создадим пустую переменую в таблице \textit{Write} и ассоциируем ее с
+    глобальной переменной \textit{foo}, которую мы задали ранее.
+
+
+    Далее напишем Python-скрипт, в котором реализуем код, необходимый для работы с ПЛК (в данном случае передача данных на ПЛК).
+    \begin{lstlisting}[label=code, caption={Python-скрипт для взаимодействия с ПЛК.}]
+    import time
+    from pyModbusTCP import utils
+    from pyModbusTCP.client import ModbusClient
+        
+    def read_int16(addr):
+            regs = c.read_holding_registers(reg_addr=addr, reg_nb=1)
+            hex_uint = utils.get_list_2comp(regs, 16)
+            return hex_uint[0]
+        
+    c = ModbusClient(host='192.168.1.150', port=502, auto_open=True)
+        
+    while True:
+        if c.is_open:
+            temp = read_int16(60200) / 10
+            hum = read_int16(60201)
+            val = int(input('type int:'))
+            val = min(24000, max(0, val))
+            if c.write_single_register(62200, val):
+                print("ok")
+            print(temp, hum)
+        else:
+            c.open()
+        time.sleep(1)
+    \end{lstlisting}
+
+    
+    Данный скрипт устанавливает соединение с ПЛК по протоколу
+    ModbusTCP, после чего начинает бесконечный циклический опрос
+    регистров, содержащих значения температуры и влажности, а также
+    запись введенных пользователем в консоль значений (\textit{val}) в регистр,
+    ассоциированный с глобальной переменной проекта. При этом значение переменной
+    не может превысить $24000$ или быть ниже $0$.
+
+
+    После мы загрузили программу в ПЛК и запустили ее, тем самым убедившись
+    в том, что все скомпилировалось без ошибок, значение глобальной переменной в узле \textit{GVL} изменяется всегда, когда пользователь
+    вводит некоторое значение в консоль, данные температуры и влажности отображаются в консоли.
+
+
+    Мы приравняли переменную \textit{foo} к переменной \textit{motor}, чтобы при передаче данных в первую из них вторая подбирала это значение и передавала на мотор.
+    Программа корректно выполнялась -- мотор вращался с той скоростью, которую пользователь ввел в консоль на своем ПК. Подаваемые значения не превышали заданный диапазон значений и не были
+    ниже его.
+
+    
+    \subsection{Управление частотным преобразователем.}
+    
 \end{document}
