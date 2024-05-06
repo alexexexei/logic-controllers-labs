@@ -1,4 +1,4 @@
 # ITMO plc course 4th semester labs  
-Contributors:
+lab #2 contributors:
 - Alexey Rumyantsev
 - Dyachikhin Daniil
