@@ -2,6 +2,7 @@
 lab #2 contributors:
 - Rumyantsev Alexey
 - Dyachikhin Daniil  
+  
 lab #3 contributors:
 - Rumyantsev Alexey
 - Dyachikhin Daniil
